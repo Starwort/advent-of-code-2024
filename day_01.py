@@ -25,7 +25,7 @@ raw = aoc_helper.fetch(1, 2024)
 
 
 def parse_raw(raw: str):
-    return extract_ints(raw)
+    return extract_ints(raw).chunked(2).transposition()
 
 
 data = parse_raw(raw)
@@ -35,14 +35,7 @@ data = parse_raw(raw)
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
 def part_one(data=data):
-    return (
-        data.chunked(2)
-        .transposition()
-        .mapped(sorted)
-        .transposition()
-        .mapped(lambda i: abs(i[0] - i[1]))
-        .sum()
-    )
+    return data.mapped(sorted).transposition().mapped(lambda i: abs(i[0] - i[1])).sum()
 
 
 # aoc_helper.lazy_test(day=1, year=2024, parse=parse_raw, solution=part_one)
@@ -52,7 +45,7 @@ def part_one(data=data):
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
 def part_two(data=data):
-    a, b = data.chunked(2).transposition()
+    a, b = data
     return a.mapped(lambda i: i * b.count(i)).sum()
 
 
