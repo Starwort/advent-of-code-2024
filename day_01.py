@@ -37,10 +37,8 @@ data = parse_raw(raw)
 def part_one(data=data):
     return (
         data.chunked(2)
-        .mapped(list)
         .transposition()
         .mapped(sorted)
-        .mapped(list)
         .transposition()
         .mapped(lambda i: abs(i[0] - i[1]))
         .sum()
@@ -54,7 +52,7 @@ def part_one(data=data):
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
 def part_two(data=data):
-    a, b = data.chunked(2).mapped(list).transposition()
+    a, b = data.chunked(2).transposition()
     return a.mapped(lambda i: i * b.count(i)).sum()
 
 
