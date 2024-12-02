@@ -35,19 +35,13 @@ data = parse_raw(raw)
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
 def part_one(data=data):
-    return (
-        data.filtered(lambda i: i == sorted(i) or i == sorted(i, reverse=True))
-        .filtered(
-            lambda i: i.windowed(2).mapped(lambda i: 1 <= abs(i[0] - i[1]) <= 3).all()
-        )
-        .len()
-    )
+    return data.filtered(safe).len()
 
 
 aoc_helper.lazy_test(day=2, year=2024, parse=parse_raw, solution=part_one)
 
 
-def safe(i):
+def safe(i: list[int]):
     return (i == sorted(i) or i == sorted(i, reverse=True)) and i.windowed(2).mapped(
         lambda i: 1 <= abs(i[0] - i[1]) <= 3
     ).all()
