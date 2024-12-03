@@ -1,4 +1,5 @@
 from collections import Counter, defaultdict, deque
+import re
 
 import aoc_helper
 from aoc_helper import (
@@ -25,7 +26,7 @@ raw = aoc_helper.fetch(3, 2024)
 
 
 def parse_raw(raw: str):
-    return ...
+    return re.findall(r"mul\((\d+),(\d+)\)|(do\(\))|(don't\(\))", raw)
 
 
 data = parse_raw(raw)
@@ -35,7 +36,7 @@ data = parse_raw(raw)
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
 def part_one(data=data):
-    ...
+    return list(data).mapped(lambda i: int(i[0]) * int(i[1])).sum()
 
 
 aoc_helper.lazy_test(day=3, year=2024, parse=parse_raw, solution=part_one)
@@ -45,7 +46,17 @@ aoc_helper.lazy_test(day=3, year=2024, parse=parse_raw, solution=part_one)
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
 def part_two(data=data):
-    ...
+    on = True
+    total = 0
+    for a, b, do, dont in data:
+        if dont:
+            on = False
+        elif do:
+            on = True
+        elif on:
+            total += int(a) * int(b)
+
+    return total
 
 
 aoc_helper.lazy_test(day=3, year=2024, parse=parse_raw, solution=part_two)
