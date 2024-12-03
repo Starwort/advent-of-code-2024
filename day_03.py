@@ -36,7 +36,12 @@ data = parse_raw(raw)
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
 def part_one(data=data):
-    return list(data).mapped(lambda i: int(i[0]) * int(i[1])).sum()
+    return (
+        list(data)
+        .filtered(lambda i: not (i[2] or i[3]))
+        .mapped(lambda i: int(i[0]) * int(i[1]))
+        .sum()
+    )
 
 
 aoc_helper.lazy_test(day=3, year=2024, parse=parse_raw, solution=part_one)
