@@ -37,18 +37,8 @@ data = parse_raw(raw)
 # collections (list, set, dict, tuple)
 def part_one(data=data):
     return (
-        list(
-            [
-                g := SparseGrid.from_string("XMAS", str, str),
-                g := g.rotate_45_clockwise(),
-                g := g.rotate_45_clockwise(),
-                g := g.rotate_45_clockwise(),
-                g := g.rotate_45_clockwise(),
-                g := g.rotate_45_clockwise(),
-                g := g.rotate_45_clockwise(),
-                g.rotate_45_clockwise(),
-            ]
-        )
+        SparseGrid.from_string("XMAS", str, str)
+        .rotations()
         .mapped(lambda i: data.find_all(i).count())
         .sum()
     )
@@ -67,14 +57,8 @@ aoc_helper.lazy_test(
 # collections (list, set, dict, tuple)
 def part_two(data=data):
     return (
-        list(
-            [
-                g := SparseGrid.from_string("M.S\n.A.\nM.S", str, str),
-                g := g.rotate_45_clockwise().rotate_45_clockwise(),
-                g := g.rotate_45_clockwise().rotate_45_clockwise(),
-                g.rotate_45_clockwise().rotate_45_clockwise(),
-            ]
-        )
+        SparseGrid.from_string("M.M\n.A.\nS.S", str, str)
+        .cardinal_rotations()
         .mapped(lambda i: data.find_all(i).count())
         .sum()
     )
