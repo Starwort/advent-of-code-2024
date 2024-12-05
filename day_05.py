@@ -27,7 +27,9 @@ raw = aoc_helper.fetch(5, 2024)
 
 def parse_raw(raw: str):
     a, b = raw.split("\n\n")
-    return extract_ints(a).chunked(2), list(b.splitlines()).mapped(extract_ints)
+    return set(extract_ints(a).chunked(2).mapped(tuple)), list(b.splitlines()).mapped(
+        extract_ints
+    )
 
 
 data = parse_raw(raw)
@@ -39,7 +41,7 @@ data = parse_raw(raw)
 def part_one(data=data):
     a, b = data
     b = b.filtered(
-        lambda i: a.all(
+        lambda i: iter(a).all(
             lambda j: j[0] not in i or j[1] not in i or i.index(j[0]) < i.index(j[1])
         )
     )
@@ -55,22 +57,14 @@ aoc_helper.lazy_test(day=5, year=2024, parse=parse_raw, solution=part_one)
 def part_two(data=data):
     a, b = data
     c = b.filtered(
-        lambda i: a.all(
+        lambda i: iter(a).all(
             lambda j: j[0] not in i or j[1] not in i or i.index(j[0]) < i.index(j[1])
         )
     )
     b = b.filtered(lambda i: i not in c)
+    a = {i: -1 for i in a} | {(i[1], i[0]): 1 for i in a}
     for i in b:
-        i.sort(
-            key=cmp_to_key(
-                lambda x, y: a.mapped(
-                    lambda j: {
-                        (j[0], j[1]): -1,
-                        (j[1], j[0]): 1,
-                    }.get((x, y), 0)
-                ).sum()
-            )
-        )
+        i.sort(key=cmp_to_key(lambda x, y: a.get((x, y), 0)))
     return b.mapped(lambda i: i[i.len() // 2]).sum()
 
 
