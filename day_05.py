@@ -1,4 +1,5 @@
 from collections import Counter, defaultdict, deque
+from functools import cmp_to_key
 
 import aoc_helper
 from aoc_helper import (
@@ -25,7 +26,8 @@ raw = aoc_helper.fetch(5, 2024)
 
 
 def parse_raw(raw: str):
-    return ...
+    a, b = raw.split("\n\n")
+    return extract_ints(a).chunked(2), list(b.splitlines()).mapped(extract_ints)
 
 
 data = parse_raw(raw)
@@ -35,7 +37,13 @@ data = parse_raw(raw)
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
 def part_one(data=data):
-    ...
+    a, b = data
+    b = b.filtered(
+        lambda i: a.all(
+            lambda j: j[0] not in i or j[1] not in i or i.index(j[0]) < i.index(j[1])
+        )
+    )
+    return b.mapped(lambda i: i[i.len() // 2]).sum()
 
 
 aoc_helper.lazy_test(day=5, year=2024, parse=parse_raw, solution=part_one)
@@ -45,7 +53,25 @@ aoc_helper.lazy_test(day=5, year=2024, parse=parse_raw, solution=part_one)
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
 def part_two(data=data):
-    ...
+    a, b = data
+    c = b.filtered(
+        lambda i: a.all(
+            lambda j: j[0] not in i or j[1] not in i or i.index(j[0]) < i.index(j[1])
+        )
+    )
+    b = b.filtered(lambda i: i not in c)
+    for i in b:
+        i.sort(
+            key=cmp_to_key(
+                lambda x, y: a.mapped(
+                    lambda j: {
+                        (j[0], j[1]): -1,
+                        (j[1], j[0]): 1,
+                    }.get((x, y), 0)
+                ).sum()
+            )
+        )
+    return b.mapped(lambda i: i[i.len() // 2]).sum()
 
 
 aoc_helper.lazy_test(day=5, year=2024, parse=parse_raw, solution=part_two)
