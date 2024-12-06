@@ -52,16 +52,7 @@ data = parse_raw(raw)
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
 def part_one(data=data):
-    grid, ((x, y), (dx, dy)) = data
-    positions = set()
-    while 0 <= x < grid.width and 0 <= y < grid.height:
-        positions.add((x, y))
-        nx, ny = x + dx, y + dy
-        if 0 <= nx < grid.width and 0 <= ny < grid.height and grid[ny][nx] == 1:
-            dx, dy = -dy, dx
-        else:
-            x, y = nx, ny
-    return len(positions)
+    return len(collect_path(data))
 
 
 aoc_helper.lazy_test(
