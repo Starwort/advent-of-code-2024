@@ -54,9 +54,9 @@ def could_work2(cal: list[int]):
         for bit, num in enumerate(rest):
             match (i // (3**bit)) % 3:
                 case 0:
-                    val *= num
-                case 1:
                     val += num
+                case 1:
+                    val *= num
                 case 2:
                     val *= 10 ** len(str(num))
                     val += num
