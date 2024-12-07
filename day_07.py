@@ -46,6 +46,8 @@ def could_work(cal: list[int]):
 
 
 def could_work2(cal: list[int]):
+    if could_work(cal):
+        return True
     target, first, *rest = cal
     for i in range(3 ** (len(rest))):
         val = first
