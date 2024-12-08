@@ -82,12 +82,8 @@ def part_two(data=data):
             if a != b:
                 dx = a[0] - b[0]
                 dy = a[1] - b[1]
-                ax = a[0] + dx
-                ay = a[1] + dy
-                bx = b[0] - dx
-                by = b[1] - dy
-                antinodes.add(a)
-                antinodes.add(b)
+                ax, ay = a
+                bx, by = b
                 while 0 <= ax < grid.width and 0 <= ay < grid.height:
                     antinodes.add((ax, ay))
                     ax += dx
