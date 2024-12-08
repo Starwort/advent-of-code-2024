@@ -1,5 +1,5 @@
 from collections import Counter, defaultdict, deque
-from itertools import product
+from itertools import combinations
 
 import aoc_helper
 from aoc_helper import (
@@ -48,20 +48,17 @@ def part_one(data=data):
     grid, nodes = data
     antinodes = set()
     for i in nodes:
-        for a, b in product(
-            grid.find_all(SparseGrid.from_string(i, str, str)), repeat=2
-        ):
-            if a != b:
-                dx = a[0] - b[0]
-                dy = a[1] - b[1]
-                ax = a[0] + dx
-                ay = a[1] + dy
-                bx = b[0] - dx
-                by = b[1] - dy
-                if 0 <= ax < grid.width and 0 <= ay < grid.height:
-                    antinodes.add((ax, ay))
-                if 0 <= bx < grid.width and 0 <= by < grid.height:
-                    antinodes.add((bx, by))
+        for a, b in combinations(grid.find_all(SparseGrid.from_string(i, str, str)), 2):
+            dx = a[0] - b[0]
+            dy = a[1] - b[1]
+            ax = a[0] + dx
+            ay = a[1] + dy
+            bx = b[0] - dx
+            by = b[1] - dy
+            if 0 <= ax < grid.width and 0 <= ay < grid.height:
+                antinodes.add((ax, ay))
+            if 0 <= bx < grid.width and 0 <= by < grid.height:
+                antinodes.add((bx, by))
     return len(antinodes)
 
 
@@ -76,22 +73,19 @@ def part_two(data=data):
     grid, nodes = data
     antinodes = set()
     for i in nodes:
-        for a, b in product(
-            grid.find_all(SparseGrid.from_string(i, str, str)), repeat=2
-        ):
-            if a != b:
-                dx = a[0] - b[0]
-                dy = a[1] - b[1]
-                ax, ay = a
-                bx, by = b
-                while 0 <= ax < grid.width and 0 <= ay < grid.height:
-                    antinodes.add((ax, ay))
-                    ax += dx
-                    ay += dy
-                while 0 <= bx < grid.width and 0 <= by < grid.height:
-                    antinodes.add((bx, by))
-                    bx -= dx
-                    by -= dy
+        for a, b in combinations(grid.find_all(SparseGrid.from_string(i, str, str)), 2):
+            dx = a[0] - b[0]
+            dy = a[1] - b[1]
+            ax, ay = a
+            bx, by = b
+            while 0 <= ax < grid.width and 0 <= ay < grid.height:
+                antinodes.add((ax, ay))
+                ax += dx
+                ay += dy
+            while 0 <= bx < grid.width and 0 <= by < grid.height:
+                antinodes.add((bx, by))
+                bx -= dx
+                by -= dy
     return len(antinodes)
 
 
