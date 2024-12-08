@@ -1,4 +1,5 @@
 from collections import Counter, defaultdict, deque
+from itertools import product
 
 import aoc_helper
 from aoc_helper import (
@@ -25,7 +26,15 @@ raw = aoc_helper.fetch(8, 2024)
 
 
 def parse_raw(raw: str):
-    return ...
+    nodes = set()
+
+    def classify(c: str):
+        if c == ".":
+            return None
+        nodes.add(c)
+        return c
+
+    return Grid.from_string(raw, classify=classify), nodes
 
 
 data = parse_raw(raw)
@@ -35,7 +44,25 @@ data = parse_raw(raw)
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
 def part_one(data=data):
-    ...
+    grid: Grid[str]
+    grid, nodes = data
+    antinodes = set()
+    for i in nodes:
+        for a, b in product(
+            grid.find_all(SparseGrid.from_string(i, str, str)), repeat=2
+        ):
+            if a != b:
+                dx = a[0] - b[0]
+                dy = a[1] - b[1]
+                ax = a[0] + dx
+                ay = a[1] + dy
+                bx = b[0] - dx
+                by = b[1] - dy
+                if 0 <= ax < grid.width and 0 <= ay < grid.height:
+                    antinodes.add((ax, ay))
+                if 0 <= bx < grid.width and 0 <= by < grid.height:
+                    antinodes.add((bx, by))
+    return len(antinodes)
 
 
 aoc_helper.lazy_test(day=8, year=2024, parse=parse_raw, solution=part_one)
@@ -45,7 +72,31 @@ aoc_helper.lazy_test(day=8, year=2024, parse=parse_raw, solution=part_one)
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
 def part_two(data=data):
-    ...
+    grid: Grid[str]
+    grid, nodes = data
+    antinodes = set()
+    for i in nodes:
+        for a, b in product(
+            grid.find_all(SparseGrid.from_string(i, str, str)), repeat=2
+        ):
+            if a != b:
+                dx = a[0] - b[0]
+                dy = a[1] - b[1]
+                ax = a[0] + dx
+                ay = a[1] + dy
+                bx = b[0] - dx
+                by = b[1] - dy
+                antinodes.add(a)
+                antinodes.add(b)
+                while 0 <= ax < grid.width and 0 <= ay < grid.height:
+                    antinodes.add((ax, ay))
+                    ax += dx
+                    ay += dy
+                while 0 <= bx < grid.width and 0 <= by < grid.height:
+                    antinodes.add((bx, by))
+                    bx -= dx
+                    by -= dy
+    return len(antinodes)
 
 
 aoc_helper.lazy_test(day=8, year=2024, parse=parse_raw, solution=part_two)
