@@ -68,25 +68,11 @@ def part_two(data=data):
             y %= 103
             data[j] = (x, y), (dx, dy)
         if len({r for r, _ in data}) == data.len():
+            grid = Grid(list([list([False]) * 101 for _ in range(103)]))
+            for (x, y), _ in data:
+                grid[y][x] = True
+            print(grid)
             return time
-        # grid = Grid(list([list([False]) * 101 for _ in range(103)]))
-        # for (x, y), _ in data:
-        #     grid[y][x] = True
-        # if (regions := list(grid.regions())).len() == 2:
-        #     (a, _), (b, _) = regions
-        #     if grid[next(iter(b))]:
-        #         a = b
-        #     grid = SparseGrid(bool)
-        #     for x, y in a:
-        #         grid[x, y] = True
-        #     min_x, min_y, max_x, max_y = grid.bounds([False])
-        #     mirror = SparseGrid(bool)
-        #     for x in irange(min_x, max_x):
-        #         for y in irange(min_y, max_y):
-        #             mirror[max_x - (x - min_x), y] = grid[x, y]
-        #     if all(mirror[i] == grid[i] for i in grid.data):
-        #         grid.pretty_print(lambda i: " #"[i], [False])
-        #         return time
 
 
 aoc_helper.lazy_test(day=14, year=2024, parse=parse_raw, solution=part_two)
