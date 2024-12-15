@@ -40,7 +40,7 @@ def part_one(data=data):
     grid, moves = data
     grid = grid.deepcopy()
     rx, ry = next(grid.find_all(3))
-    grid[ry][rx] = 0
+    grid[rx, ry] = 0
     for move in moves:
         dx, dy = {
             "^": (0, -1),
@@ -61,10 +61,10 @@ def part_one(data=data):
                     by += dy
                 if grid[bx, by] == 1:
                     continue
-                grid[by][bx] = 2
+                grid[bx, by] = 2
                 rx += dx
                 ry += dy
-                grid[ry][rx] = 0
+                grid[rx, ry] = 0
     return grid.find_all(2).map(lambda i: 100 * i[1] + i[0]).sum()
 
 
@@ -77,7 +77,7 @@ def part_one(data=data):
 def part_two(data=data):
     grid, moves = data
     rx, ry = next(grid.find_all(3))
-    grid[ry][rx] = 0
+    grid[rx, ry] = 0
     rx = 2 * rx
     grid = Grid[str](
         list(
@@ -131,27 +131,27 @@ def part_two(data=data):
                 )
             match grid[bx, by]:
                 case "[":
-                    grid[by][bx] = "."
-                    grid[by][bx + 1] = "."
+                    grid[bx, by] = "."
+                    grid[bx + 1, by] = "."
                     match grid[bx + 2 * dx, by + dy]:
                         case "[" | "]":
                             push(bx + 2 * dx, by + dy)
                     match grid[bx + dx + 1, by + dy]:
                         case "[" | "]":
                             push(bx + dx + 1, by + dy)
-                    grid[by + dy][bx + dx] = "["
-                    grid[by + dy][bx + dx + 1] = "]"
+                    grid[bx + dx, by + dy] = "["
+                    grid[bx + dx + 1, by + dy] = "]"
                 case "]":
-                    grid[by][bx] = "."
-                    grid[by][bx - 1] = "."
+                    grid[bx, by] = "."
+                    grid[bx - 1, by] = "."
                     match grid[bx + 2 * dx, by + dy]:
                         case "[" | "]":
                             push(bx + 2 * dx, by + dy)
                     match grid[bx + dx - 1, by + dy]:
                         case "[" | "]":
                             push(bx + dx - 1, by + dy)
-                    grid[by + dy][bx + dx - 1] = "["
-                    grid[by + dy][bx + dx] = "]"
+                    grid[bx + dx - 1, by + dy] = "["
+                    grid[bx + dx, by + dy] = "]"
 
         match grid[rx + dx, ry + dy]:
             case ".":
