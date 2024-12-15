@@ -38,6 +38,7 @@ data = parse_raw(raw)
 def part_one(data=data):
     grid: Grid[int]
     grid, moves = data
+    grid = grid.deepcopy()
     rx, ry = next(grid.find_all(3))
     grid[ry][rx] = 0
     for move in moves:
@@ -172,7 +173,6 @@ def part_two(data=data):
                 rx += dx
                 ry += dy
                 push(rx, ry)
-    print("\n".join("".join(row) for row in grid))
     return grid.find_all("[").map(lambda i: 100 * i[1] + i[0]).sum()
 
 
