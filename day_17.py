@@ -116,14 +116,12 @@ def part_two(data=data):
     )
     possible_a = [0]
     for i in rest[::-1]:
-        next = []
-        for a in range(8):
-            for last_a in possible_a:
-                a += last_a << 3
-                if vals["out_val"](a) & 7 == i:
-                    next.append(a)
-                a -= last_a << 3
-        possible_a = next
+        possible_a = [
+            new_a
+            for a in range(8)
+            for last_a in possible_a
+            if vals["out_val"](new_a := a + (last_a << 3)) == i
+        ]
     return min(possible_a)
 
 
