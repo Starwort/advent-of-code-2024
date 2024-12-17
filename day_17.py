@@ -88,7 +88,7 @@ def part_two(data=data):
     instructions = []
     found_jump = False
     for opc, opa in chunk(rest, 2):
-        opa2 = [0, 1, 2, 3, "a", "b", "c"][opa]
+        opa2 = [0, 1, 2, 3, "a", "b", "c", "_"][opa]
         assert not found_jump
         match opc:
             case 0:
