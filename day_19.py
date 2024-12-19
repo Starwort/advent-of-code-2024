@@ -33,15 +33,18 @@ def parse_raw(raw: str):
 data = parse_raw(raw)
 
 
-@cache
 def make(s: str, a: list[str]):
-    if not s:
-        return 1
-    tot = 0
-    for x in a:
-        if s.startswith(x):
-            tot += make(s[len(x) :], a)
-    return tot
+    @cache
+    def make(s: str):
+        if not s:
+            return 1
+        tot = 0
+        for x in a:
+            if s.startswith(x):
+                tot += make(s[len(x) :])
+        return tot
+
+    return make(s)
 
 
 # providing this default is somewhat of a hack - there isn't any other way to
@@ -65,17 +68,7 @@ def part_two(data=data):
     a: list[str]
     a, b = data
 
-    @cache
-    def make(s: str):
-        if not s:
-            return 1
-        tot = 0
-        for x in a:
-            if s.startswith(x):
-                tot += make(s[len(x) :])
-        return tot
-
-    return b.mapped(lambda x: make(x)).sum()
+    return b.mapped(lambda x: make(x, a)).sum()
 
 
 aoc_helper.lazy_test(day=19, year=2024, parse=parse_raw, solution=part_two)
