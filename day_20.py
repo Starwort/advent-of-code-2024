@@ -72,7 +72,6 @@ def part_one(data=data):
         .filtered(lambda i: i != float("inf"))
         .filtered(lambda i: i > 0)
     )
-    print(Counter(out))
     return out.filtered(lambda i: i >= 100).len()
 
 
@@ -131,7 +130,6 @@ def part_two(data=data):
         .filtered(lambda i: i != float("inf"))
         .filtered(lambda i: i > 50)
     )
-    print(Counter(out))
     return out.filtered(lambda i: i >= 100).len()
 
 
