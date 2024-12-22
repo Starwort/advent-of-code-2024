@@ -80,8 +80,7 @@ def part_two(data=data):
             for i, val in enumerate(vals):
                 tot += arr[4 + val, i, 0]
             seen[a, b, c, d] = tot
-    seq, val = max(seen.items(), key=lambda i: i[1])
-    return val
+    return max(seen.values())
 
 
 aoc_helper.lazy_submit(day=22, year=2024, solution=part_one, data=data)
