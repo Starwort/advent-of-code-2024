@@ -51,36 +51,19 @@ aoc_helper.lazy_test(day=22, year=2024, parse=parse_raw, solution=part_one)
 
 
 def part_two(data=data):
-    import numpy as np
-
-    all_data = list([data])
-    for i in range(2000):
-        data = data.mapped(evolve)
-        all_data.append(data)
-    arr = np.array(all_data)
-    arr = np.repeat(arr.reshape(*arr.shape, 1), 5, axis=2)
-    arr %= 10
-    arr[1:, :, 1] = arr[1:, :, 0] - arr[:-1, :, 0]
-    arr[2:, :, 2] = arr[1:-1, :, 0] - arr[:-2, :, 0]
-    arr[3:, :, 3] = arr[1:-2, :, 0] - arr[:-3, :, 0]
-    arr[4:, :, 4] = arr[1:-3, :, 0] - arr[:-4, :, 0]
-    seen = {}
-    for row in arr[4:]:
-        for a, b, c, d in row[:, 1:]:
-            if (a, b, c, d) in seen:
-                continue
-            vals = np.argmax(
-                (arr[4:, :, 4] == a)
-                * (arr[4:, :, 3] == b)
-                * (arr[4:, :, 2] == c)
-                * (arr[4:, :, 1] == d),
-                axis=0,
-            )
-            tot = 0
-            for i, val in enumerate(vals):
-                tot += arr[4 + val, i, 0]
-            seen[a, b, c, d] = tot
-    return max(seen.values())
+    vals = defaultdict(int)
+    for val in data:
+        data = list([val])
+        for _ in range(1999):
+            data.append(evolve(data[-1]))
+        diffs = data.windowed(2).mapped(lambda i: i[1] % 10 - i[0] % 10)
+        seen = set()
+        for val, (a, b, c, d) in zip(data[4:], diffs.windowed(4)):
+            if (a, b, c, d) not in seen:
+                vals[a, b, c, d] += val % 10
+                seen.add((a, b, c, d))
+            a, b, c, d = b, c, d, -(val % 10 - (val := evolve(val)) % 10)
+    return max(vals.values())
 
 
 aoc_helper.lazy_submit(day=22, year=2024, solution=part_one, data=data)
