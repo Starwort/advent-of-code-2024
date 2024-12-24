@@ -214,10 +214,13 @@ def part_two(data=data):
     swaps = set()
     for i in range(45):
         j = f"{i:02}"
-        find = lambda a, b, op: (
-            rules.find(lambda x: x[0] in (f"{a} {op} {b}", f"{b} {op} {a}"))
-            or [None, None]
-        )[1]
+
+        def find(a, b, op):
+            return (
+                rules.find(lambda x: x[0] in (f"{a} {op} {b}", f"{b} {op} {a}"))
+                or [None, None]
+            )[1]
+
         # a full-adder should be M=X^Y, N=X&Y, R=C&M, Z=C^M, C=R|N
         m = find(f"x{j}", f"y{j}", "XOR")
         n = find(f"x{j}", f"y{j}", "AND")
