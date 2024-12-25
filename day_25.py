@@ -25,7 +25,7 @@ raw = aoc_helper.fetch(25, 2024)
 
 
 def parse_raw(raw: str):
-    return ...
+    return list(map(Grid.from_string, raw.split("\n\n")))
 
 
 data = parse_raw(raw)
@@ -35,7 +35,19 @@ data = parse_raw(raw)
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
 def part_one(data=data):
-    ...
+    data: list[Grid[int]]
+    height = data[0].height
+    keys = data.filtered(lambda i: i[0].all()).mapped(
+        lambda i: i.transpose().data.mapped(lambda i: i.filtered(1).len())
+    )
+    locks = data.filtered(lambda i: i[0].none()).mapped(
+        lambda i: i.transpose().data.mapped(lambda i: i.filtered(1).len())
+    )
+    return sum(
+        all(k + l <= height for k, l in zip(key, lock))
+        for key in keys
+        for lock in locks
+    )
 
 
 aoc_helper.lazy_test(day=25, year=2024, parse=parse_raw, solution=part_one)
@@ -44,8 +56,7 @@ aoc_helper.lazy_test(day=25, year=2024, parse=parse_raw, solution=part_one)
 # providing this default is somewhat of a hack - there isn't any other way to
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
-def part_two(data=data):
-    ...
+def part_two(data=data): ...
 
 
 aoc_helper.lazy_test(day=25, year=2024, parse=parse_raw, solution=part_two)
