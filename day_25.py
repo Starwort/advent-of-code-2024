@@ -34,8 +34,7 @@ data = parse_raw(raw)
 # providing this default is somewhat of a hack - there isn't any other way to
 # force type inference to happen, AFAIK - but this won't work with standard
 # collections (list, set, dict, tuple)
-def part_one(data=data):
-    data: list[Grid[int]]
+def part_one(data: list[Grid[int]] = data):
     height = data[0].height
     keys = data.filtered(lambda i: i[0].all()).mapped(
         lambda i: i.transpose().data.mapped(lambda i: i.filtered(1).len())
